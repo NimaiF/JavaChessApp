@@ -8,10 +8,9 @@ import java.io.IOException;
 
 public class Square extends JLabel {
     public static final int SIZE = App.SIZE / 8;
-    public static final ImageIcon[] pieceIcons = new ImageIcon[12];
+    public static final ImageIcon[] pieceIcons = new ImageIcon[13];
 
     public int index;
-    public int pieceType;
 
     static {
         String[] pieceNames = {"whitePawn", "whiteKnight", "whiteBishop", "whiteRook", "whiteQueen", "whiteKing", "blackPawn", "blackKnight", "blackBishop", "blackRook", "blackQueen", "blackKing"};
@@ -26,11 +25,9 @@ public class Square extends JLabel {
         }
     }
 
-    Square(int index, int pieceType) {
+    Square(int index) {
         this.setSize(new Dimension(SIZE, SIZE));
-        this.setPiece(pieceType);
         this.moveTo(index);
-        this.pieceType = pieceType;
     }
 
     public void setPiece(int pieceType) {

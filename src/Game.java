@@ -22,7 +22,7 @@ public class Game {
 
     Game(String FEN) {
         String[] fenData = FEN.split(" ");
-        if (fenData[1] == "w") {
+        if (fenData[1].equals("w")) {
             this.whiteToMove = true;
         } else {
             this.whiteToMove = false;
@@ -43,6 +43,9 @@ public class Game {
 
         if (!fenData[3].equals("-")) {
             this.enPassantIndex = (fenData[3].charAt(0) - 'a') + (fenData[3].charAt(1) - '1') * 8;
+        }
+        else {
+            this.enPassantIndex = -1;
         }
 
         this.halfMoves = Integer.parseInt(fenData[4]);
