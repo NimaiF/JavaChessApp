@@ -41,7 +41,7 @@ public class Game {
             this.castlingRights |= 0b0001;
         }
 
-        if (fenData[3] != "-") {
+        if (!fenData[3].equals("-")) {
             this.enPassantIndex = (fenData[3].charAt(0) - 'a') + (fenData[3].charAt(1) - '1') * 8;
         }
 
@@ -49,10 +49,59 @@ public class Game {
         this.fullMoves = Integer.parseInt(fenData[5]);
 
         String[] boardFEN = fenData[0].split("/");
-        int row = 0;
-        int col = 0;
+        int index = 56;
         for (String fenRow : boardFEN) {
-            
+            for (String fenCol : fenRow.split("")) {
+                if (fenCol.matches("[1-8]")) {
+                    int end = index + Integer.parseInt(fenCol);
+                    while (index < end) {
+                        board[index] = empty;
+                        index++;
+                    }
+                }
+                else {
+                    switch (fenCol) {
+                        case "P":
+                            board[index] = whitePawn;
+                            break;
+                        case "N":
+                            board[index] = whiteKnight;
+                            break;
+                        case "B":
+                            board[index] = whiteBishop;
+                            break;
+                        case "R":
+                            board[index] = whiteRook;
+                            break;
+                        case "Q":
+                            board[index] = whiteQueen;
+                            break;
+                        case "K":
+                            board[index] = whiteKing;
+                            break;
+                        case "p":
+                            board[index] = blackPawn;
+                            break;
+                        case "n":
+                            board[index] = blackKnight;
+                            break;
+                        case "b":
+                            board[index] = blackBishop;
+                            break;
+                        case "r":
+                            board[index] = blackRook;
+                            break;
+                        case "q":
+                            board[index] = blackQueen;
+                            break;
+                        case "k":
+                            board[index] = blackKing;
+                            break;
+                    }
+                    index++;
+                }
+            }
+            index -= 16;
         }
     }
 }

@@ -27,6 +27,17 @@ public class App {
             super.paintComponent(g);
             g.drawImage(background, 0, 0, this);
         }
+
+        public void displayPieces(int[] board) {
+            for (int index = 0; index < 64; index++) {
+                if (board[index] == Game.empty) {
+                    continue;
+                }
+
+                Square piece = new Square(index, board[index]);
+                this.add(piece);
+            }
+        }
     }
 
     public static void main(final String[] args) {
@@ -43,8 +54,8 @@ public class App {
         frame.setResizable(false);
 
         GUI gui = new GUI();
-        Square piece = new Square(0, Game.whitePawn);
-        gui.add(piece);
+        Game game = new Game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        gui.displayPieces(game.board);
 
         frame.add(gui);
         frame.pack();
