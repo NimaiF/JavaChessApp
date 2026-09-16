@@ -2,11 +2,12 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.*;
 
 public class App {
 
     public static final int SIZE = 800;
-    public static final boolean playerWhite = false;
+    public static final boolean playerWhite = true;
 
     public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -23,8 +24,8 @@ public class App {
 
         Game game = new Game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         GUI gui = new GUI(game.board);
-        MovementManager movementManager = new MovementManager();
-        movementManager.registerSquares(gui.squares);
+        MovementManager movementManager = new MovementManager(gui);
+        System.out.println(Long.toBinaryString(game.bitboards[Game.blackKing]));
 
         frame.add(gui);
         frame.pack();

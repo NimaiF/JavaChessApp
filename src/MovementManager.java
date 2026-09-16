@@ -5,20 +5,25 @@ import java.awt.event.MouseEvent;
 
 public class MovementManager {
     private int selectedIndex;
+    private GUI gui;
 
     public MouseAdapter mouseAdapter;
 
-    MovementManager() {
+    MovementManager(GUI gui) {
+        this.gui = gui;
+        
         mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println(((Square) e.getComponent()).index);
             }
         };
+
+        registerSquares();
     }
 
-    public void registerSquares(Square[] squares) {
-        for (Square square : squares) {
+    private void registerSquares() {
+        for (Square square : gui.squares) {
             square.addMouseListener(mouseAdapter);
         }
     }
