@@ -1,3 +1,5 @@
+import java.io.*;
+
 public class Game {
     public static final int whitePawn = 0;
     public static final int whiteKnight = 1;
@@ -32,7 +34,22 @@ public class Game {
     public static final int whiteQueensideRook = 0;
     public static final int blackKingsideRook = 63;
     public static final int blackQueensideRook = 56;
+
+    public static long[] whitePawnBitboards;
+    public static long[] blackPawnBitboards;
+    public static long[] knightBitboards;
+    public static long[][] bishopBitboards;
+    public static long[][] rookBitboards;
+    public static long[] kingBitboards;
+    public static long[] bishopMasks;
+    public static long[] rookMasks;
+    public static long[] bishopMagics;
+    public static long[] rookMagics;
+    public static int[] bishopBits;
+    public static int[] rookBits;
     
+    // -------------------------------
+
     public boolean whiteToMove;
     public byte castlingRights = 0b0000;
     public int enPassantIndex;
@@ -40,6 +57,73 @@ public class Game {
     public int fullMoves;
     public final int[] board = new int[64];
     public final long[] bitboards = new long[12];
+
+    static {
+        try {
+            InputStream str = Game.class.getResourceAsStream("/Bitboards/KnightBitboards");
+            ObjectInputStream ois = new ObjectInputStream(str);
+            knightBitboards = (long[]) ois.readObject();
+            ois.close();
+
+            str = Game.class.getResourceAsStream("/Bitboards/WhitePawnBitboards");
+            ois = new ObjectInputStream(str);
+            whitePawnBitboards = (long[]) ois.readObject();
+            ois.close();
+
+            str = Game.class.getResourceAsStream("/Bitboards/BlackPawnBitboards");
+            ois = new ObjectInputStream(str);
+            blackPawnBitboards = (long[]) ois.readObject();
+            ois.close();
+
+            str = Game.class.getResourceAsStream("/Bitboards/BishopBitboards");
+            ois = new ObjectInputStream(str);
+            bishopBitboards = (long[][]) ois.readObject();
+            ois.close();
+
+            str = Game.class.getResourceAsStream("/Bitboards/RookBitboards");
+            ois = new ObjectInputStream(str);
+            rookBitboards = (long[][]) ois.readObject();
+            ois.close();
+
+            str = Game.class.getResourceAsStream("/Bitboards/KingBitboards");
+            ois = new ObjectInputStream(str);
+            kingBitboards = (long[]) ois.readObject();
+            ois.close();
+
+            str = Game.class.getResourceAsStream("/Bitboards/BishopMasks");
+            ois = new ObjectInputStream(str);
+            bishopMasks = (long[]) ois.readObject();
+            ois.close();
+
+            str = Game.class.getResourceAsStream("/Bitboards/RookMasks");
+            ois = new ObjectInputStream(str);
+            rookMasks = (long[]) ois.readObject();
+            ois.close();
+
+            str = Game.class.getResourceAsStream("/Bitboards/BishopMagics");
+            ois = new ObjectInputStream(str);
+            bishopMagics = (long[]) ois.readObject();
+            ois.close();
+
+            str = Game.class.getResourceAsStream("/Bitboards/RookMagics");
+            ois = new ObjectInputStream(str);
+            rookMagics = (long[]) ois.readObject();
+            ois.close();
+
+            str = Game.class.getResourceAsStream("/Bitboards/BishopBits");
+            ois = new ObjectInputStream(str);
+            bishopBits = (int[]) ois.readObject();
+            ois.close();
+
+            str = Game.class.getResourceAsStream("/Bitboards/RookBits");
+            ois = new ObjectInputStream(str);
+            rookBits = (int[]) ois.readObject();
+            ois.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     Game(String FEN) {
         String[] fenData = FEN.split(" ");
@@ -141,7 +225,7 @@ public class Game {
     }
 
     public static int[] decodeMove(int move) {
-        int[] moveArray = {move >> 10, move >> 4 & 0b111111, move & 0b1111};
+        int[] moveArray = {move >>> 10, move >>> 4 & 0b111111, move & 0b1111};
         return moveArray;
     }
 

@@ -1,7 +1,11 @@
 package test;
+import java.util.*;
 
 public class Test3 {
     public static void main(String[] args) {
-        System.out.println(((10 + 33) & 0x88) == 0);
+        long[][] arr = new long[64][];
+        arr[1] = new long[3];
+        arr[1][2] = 3;
+        System.out.println(arr[1][2]);
     }
 }

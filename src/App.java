@@ -25,7 +25,6 @@ public class App {
         Game game = new Game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         GUI gui = new GUI(game.board);
         MovementManager movementManager = new MovementManager(gui);
-        System.out.println(Long.toBinaryString(game.bitboards[Game.blackKing]));
 
         frame.add(gui);
         frame.pack();
