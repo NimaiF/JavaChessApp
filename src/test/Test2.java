@@ -7,8 +7,10 @@ public class Test2 {
         try {
             InputStream str = Test2.class.getResourceAsStream("../Bitboards/WhitePawnBitboards");
             ObjectInputStream ois = new ObjectInputStream(str);
-            long[] arr = (long[]) ois.readObject();
-            showBitboard(arr[9]);
+            var arr = ois.readObject();
+            if (arr instanceof long[] arr2) {
+                System.out.println(arr2[1]);
+            }
             ois.close();
         }
         catch (Exception e) {

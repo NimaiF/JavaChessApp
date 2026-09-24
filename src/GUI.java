@@ -9,8 +9,7 @@ public class GUI extends JPanel {
 
     public final Square[] squares = new Square[64];
 
-    GUI(int[] board) {
-        this.board = board;
+    GUI() {
         this.setPreferredSize(new Dimension(App.SIZE, App.SIZE));
         this.setLayout(null);
         try {
@@ -25,7 +24,6 @@ public class GUI extends JPanel {
             this.add(square);
             squares[index] = square;
         }
-        this.updateSquares();
     }
 
     @Override
@@ -34,9 +32,9 @@ public class GUI extends JPanel {
         g.drawImage(background, 0, 0, this);
     }
 
-    public void updateSquares() {
+    public void updateSquares(int[] board) {
         for (int index = 0; index < 64; index++) {
-            squares[index].setPiece(this.board[index]);
+            squares[index].setPiece(board[index]);
         }
     }
 }

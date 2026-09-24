@@ -197,7 +197,7 @@ public class BitboardGenerator {
         generateSlidingBitboards(offsets0x88, offsets, "BishopBitboards", "BishopMagics", "BishopMasks", "BishopBits");
     }
 
-    private static void showBitboard(long bitboard) {
+    public static void showBitboard(long bitboard) {
         String board = String.format("%64s", Long.toBinaryString(bitboard)).replace(" ", "0");
         for (int i = 0; i < 64; i++) {
             if ((i % 8) == 0) {
