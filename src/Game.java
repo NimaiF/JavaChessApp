@@ -439,8 +439,8 @@ public class Game {
         fullMoves = (int) stack[1];
         castlingRights = (byte) stack[2];
         enPassantIndex = (int) stack[3];
-        bitboards = ((long[]) stack[4]).clone();
-        board = ((int[]) stack[5]).clone();
+        bitboards = ((long[]) stack[4]);
+        board = ((int[]) stack[5]);
         whiteKingIndex = (int) stack[6];
         blackKingIndex = (int) stack[7];
 
@@ -540,7 +540,7 @@ public class Game {
                                 index++;
                             }
                         }
-                        if ((castlingRights & 0b0100) != 0 && (0b0000000000000000000000000000000000000000000000000000000000001100L & blockers) == 0) {
+                        if ((castlingRights & 0b0100) != 0 && (0b0000000000000000000000000000000000000000000000000000000000001110L & blockers) == 0) {
                             if (!isAttacked(2, blockers, true) && !isAttacked(3, blockers, true)) {
                                 moves[index] = encodeMove(i, 2, queenCastle);
                                 index++;
@@ -640,7 +640,7 @@ public class Game {
                                 index++;
                             }
                         }
-                        if ((castlingRights & 0b0001) != 0 && (0b0000110000000000000000000000000000000000000000000000000000000000L & blockers) == 0) {
+                        if ((castlingRights & 0b0001) != 0 && (0b0000111000000000000000000000000000000000000000000000000000000000L & blockers) == 0) {
                             if (!isAttacked(58, blockers, false) && !isAttacked(59, blockers, false)) {
                                 moves[index] = encodeMove(i, 58, queenCastle);
                                 index++;

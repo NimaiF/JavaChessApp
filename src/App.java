@@ -22,16 +22,19 @@ public class App {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        Game game = new Game("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1");
+        Game game = new Game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         GUI gui = new GUI();
         MovementManager movementManager = new MovementManager(gui);
         Engine engine = new Engine(game);
 
-        engine.perftTest(6);
+        engine.perftTest(7);
         gui.updateSquares(game.board);
 
         frame.add(gui);
         frame.pack();
         frame.setVisible(true);   
+
+        // Nodes:164075551
+        // Time:22.133065978
     }
 }

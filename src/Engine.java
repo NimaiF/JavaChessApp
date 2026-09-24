@@ -28,7 +28,7 @@ public class Engine {
 
     public long perft(int depth) {
         long nodes = 0;
-        int[] moves = new int[256];
+        int[] moves = new int[218];
 
         if (depth == 0) {
             return 1L;
