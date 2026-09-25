@@ -5,7 +5,6 @@ import java.io.IOException;
     
 public class GUI extends JPanel {
     private Image background;
-    private int[] board;
 
     public final Square[] squares = new Square[64];
 

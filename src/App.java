@@ -24,10 +24,9 @@ public class App {
 
         Game game = new Game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         GUI gui = new GUI();
-        MovementManager movementManager = new MovementManager(gui);
-        Engine engine = new Engine(game);
+        Engine engine = new Engine(game, 1000000L);
+        new MovementManager(gui, game, engine);
 
-        engine.perftTest(7);
         gui.updateSquares(game.board);
 
         frame.add(gui);

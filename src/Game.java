@@ -495,7 +495,7 @@ public class Game {
                             index++;
                         }
                     }
-                    if ((whitePawnBitboards[i] & (1L << enPassantIndex)) != 0) {
+                    if (enPassantIndex != -1 && (whitePawnBitboards[i] & (1L << enPassantIndex)) != 0) {
                         moves[index] = encodeMove(i, enPassantIndex, enPassant);
                         index++;
                     }
@@ -595,7 +595,7 @@ public class Game {
                             index++;
                         }
                     }
-                    if ((blackPawnBitboards[i] & (1L << enPassantIndex)) != 0) {
+                    if (enPassantIndex != -1 && (blackPawnBitboards[i] & (1L << enPassantIndex)) != 0) {
                         moves[index] = encodeMove(i, enPassantIndex, enPassant);
                         index++;
                     }
