@@ -654,6 +654,135 @@ public class Game {
         return index;
     }
 
+    public int generateCaptureMoves(int[] moves) {
+        int index = 0;
+
+        if (whiteToMove) {
+            long enemyBlockers = bitboards[blackPawn] | bitboards[blackKnight] | bitboards[blackBishop] | bitboards[blackRook] | bitboards[blackQueen] | bitboards[blackKing];
+            long friendlyBlockers = bitboards[whitePawn] | bitboards[whiteKnight] | bitboards[whiteBishop] | bitboards[whiteRook] | bitboards[whiteQueen] | bitboards[whiteKing];
+            long blockers = enemyBlockers | friendlyBlockers;
+            long piecesBitboard = friendlyBlockers;
+
+            while (piecesBitboard != 0) {
+                int i = Long.numberOfTrailingZeros(piecesBitboard);
+                piecesBitboard &= piecesBitboard - 1;
+                int piece = board[i];
+
+                if (piece == whitePawn) {
+                    long captures = whitePawnBitboards[i] & enemyBlockers;
+                    while (captures != 0) {
+                        int j = Long.numberOfTrailingZeros(captures);
+                        captures &= captures - 1;
+                        if (((1L << j) & eighthRank) != 0) {
+                            for (int promotion : promotionCaptures) {
+                                moves[index] = encodeMove(i, j, promotion);
+                                index++;
+                            }
+                        }
+                        else {
+                            moves[index] = encodeMove(i, j, capture);
+                            index++;
+                        }
+                    }
+                    if (enPassantIndex != -1 && (whitePawnBitboards[i] & (1L << enPassantIndex)) != 0) {
+                        moves[index] = encodeMove(i, enPassantIndex, enPassant);
+                        index++;
+                    }
+                }
+                else {
+                    long attacks = 0;
+                    switch (piece) {
+                        case whiteKnight:
+                            attacks = knightBitboards[i] & enemyBlockers;
+                            break;
+                        case whiteBishop:
+                            attacks = bishopBitboards[i][(int) (((blockers & bishopMasks[i]) * bishopMagics[i]) >>> (64 - bishopBits[i]))] & enemyBlockers;
+                            break;
+                        case whiteRook:
+                            attacks = rookBitboards[i][(int) (((blockers & rookMasks[i]) * rookMagics[i]) >>> (64 - rookBits[i]))] & enemyBlockers;
+                            break;
+                        case whiteQueen:
+                            attacks = (bishopBitboards[i][(int) (((blockers & bishopMasks[i]) * bishopMagics[i]) >>> (64 - bishopBits[i]))] | rookBitboards[i][(int) (((blockers & rookMasks[i]) * rookMagics[i]) >>> (64 - rookBits[i]))]) & enemyBlockers;
+                            break;
+                        case whiteKing:
+                            attacks = kingBitboards[i] & enemyBlockers;
+                            break;
+                    }
+
+                    while (attacks != 0) {
+                        int j = Long.numberOfTrailingZeros(attacks);
+                        attacks &= attacks - 1;
+                        moves[index] = encodeMove(i, j, capture);
+                        index++;
+                    }
+                }
+            }
+        }
+        else {
+            long friendlyBlockers = bitboards[blackPawn] | bitboards[blackKnight] | bitboards[blackBishop] | bitboards[blackRook] | bitboards[blackQueen] | bitboards[blackKing];
+            long enemyBlockers = bitboards[whitePawn] | bitboards[whiteKnight] | bitboards[whiteBishop] | bitboards[whiteRook] | bitboards[whiteQueen] | bitboards[whiteKing];
+            long blockers = enemyBlockers | friendlyBlockers;
+            long piecesBitboard = friendlyBlockers;
+
+            while (piecesBitboard != 0) {
+                int i = Long.numberOfTrailingZeros(piecesBitboard);
+                piecesBitboard &= piecesBitboard - 1;
+                int piece = board[i];
+
+                if (piece == blackPawn) {
+                    long captures = blackPawnBitboards[i] & enemyBlockers;
+                    while (captures != 0) {
+                        int j = Long.numberOfTrailingZeros(captures);
+                        captures &= captures - 1;
+                        if (((1L << j) & firstRank) != 0) {
+                            for (int promotion : promotionCaptures) {
+                                moves[index] = encodeMove(i, j, promotion);
+                                index++;
+                            }
+                        }
+                        else {
+                            moves[index] = encodeMove(i, j, capture);
+                            index++;
+                        }
+                    }
+                    if (enPassantIndex != -1 && (blackPawnBitboards[i] & (1L << enPassantIndex)) != 0) {
+                        moves[index] = encodeMove(i, enPassantIndex, enPassant);
+                        index++;
+                    }
+                }
+                else {
+                    long attacks = 0;
+                    switch (piece) {
+                        case blackKnight:
+                            attacks = knightBitboards[i] & enemyBlockers;
+                            break;
+                        case blackBishop:
+                            attacks = bishopBitboards[i][(int) (((blockers & bishopMasks[i]) * bishopMagics[i]) >>> (64 - bishopBits[i]))] & enemyBlockers;
+                            break;
+                        case blackRook:
+                            attacks = rookBitboards[i][(int) (((blockers & rookMasks[i]) * rookMagics[i]) >>> (64 - rookBits[i]))] & enemyBlockers;
+                            break;
+                        case blackQueen:
+                            attacks = (bishopBitboards[i][(int) (((blockers & bishopMasks[i]) * bishopMagics[i]) >>> (64 - bishopBits[i]))] | rookBitboards[i][(int) (((blockers & rookMasks[i]) * rookMagics[i]) >>> (64 - rookBits[i]))]) & enemyBlockers;
+                            break;
+                        case blackKing:
+                            attacks = kingBitboards[i] & enemyBlockers;
+                            break;
+                    }
+
+                    while (attacks != 0) {
+                        int j = Long.numberOfTrailingZeros(attacks);
+                        attacks &= attacks - 1;
+                        moves[index] = encodeMove(i, j, capture);
+                        index++;
+                    }
+                }
+            }
+        }
+
+        return index;
+    }
+
     public boolean isAttacked(int i, long blockers, boolean white) {
         long bishopAttacks = bishopBitboards[i][(int) (((blockers & bishopMasks[i]) * bishopMagics[i]) >>> (64 - bishopBits[i]))];
         long rookAttacks = rookBitboards[i][(int) (((blockers & rookMasks[i]) * rookMagics[i]) >>> (64 - rookBits[i]))];

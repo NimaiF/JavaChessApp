@@ -22,18 +22,29 @@ public class App {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        Game game = new Game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         GUI gui = new GUI();
-        Engine engine = new Engine(game, 1000000L);
-        new MovementManager(gui, game, engine);
-
-        gui.updateSquares(game.board);
-
         frame.add(gui);
         frame.pack();
         frame.setVisible(true);   
 
-        // Nodes:164075551
-        // Time:22.133065978
+        engineBattle(gui);
+    }
+
+    private void engineBattle(GUI gui) {
+        new Thread(new Runnable() {
+            public void run() {
+                Game game = new Game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+                Engine engine = new Engine(game, 500000000L);
+                gui.updateSquaresNow(game.board);
+                while (true) {
+                    int move = engine.iterativeDeepening();
+                    if (move == 0) {
+                        break;
+                    }
+                    game.makeMove(move);
+                    gui.updateSquaresNow(game.board);
+                }
+            }
+        }).start();
     }
 }

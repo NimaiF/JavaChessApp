@@ -36,4 +36,17 @@ public class GUI extends JPanel {
             squares[index].setPiece(board[index]);
         }
     }
+
+    public void updateSquaresNow(int[] board) {
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                public void run() {
+                    updateSquares(board);
+                }
+            });
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

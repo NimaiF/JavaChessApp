@@ -79,7 +79,7 @@ public class Engine {
             return 0;
         }
         if (depth == 0) {
-            return eval();
+            return quiesce(startTime);
         }
         
         int max = Integer.MIN_VALUE;
@@ -113,11 +113,46 @@ public class Engine {
         return max;
     }
 
+    public int quiesce(long startTime) {
+        if (System.nanoTime() - startTime > moveTime) {
+            return 0;
+        }   
+        int max = eval();
+
+        int[] moves = new int[30];
+        int nMoves = game.generateCaptureMoves(moves);
+        for (int i = 0; i < nMoves; i++) {
+            int move = moves[i];
+            game.makeMove(move);
+
+            if (!game.whiteToMove) {
+                if (game.isAttacked(game.whiteKingIndex, game.getBlockers(), true)) {
+                    game.undoMove();
+                    continue;
+                }
+            }
+            else {
+                if (game.isAttacked(game.blackKingIndex, game.getBlockers(), false)) {
+                    game.undoMove();
+                    continue;
+                }
+            }
+
+            int score = -quiesce(startTime);
+            if (score > max) {
+                max = score;
+            }
+            game.undoMove();
+        }
+
+        return max;
+    }
+
     public int rootNegaMax(int depth, long startTime) {        
         int max = Integer.MIN_VALUE;
 
         int[] moves = new int[218];
-        int bestMove = moves[0];
+        int bestMove = 0;
 
         int nMoves = game.generateMoves(moves);
         for (int i = 0; i < nMoves; i++) {
@@ -136,6 +171,9 @@ public class Engine {
                     continue;
                 }
             }
+            if (bestMove == 0) {
+                bestMove = move;
+            }
 
             int score = -negaMax(depth - 1, startTime);
             if (score > max) {
@@ -144,7 +182,7 @@ public class Engine {
             }
             game.undoMove();
 
-            if (System.nanoTime() - startTime > moveTime) {
+            if (System.nanoTime() - startTime > moveTime && depth != 1) {
                 return 0;
             }
         }
@@ -157,7 +195,6 @@ public class Engine {
         int depth = 1;
         int bestMove = 0;
         do {
-            System.out.println(depth);
             int move = rootNegaMax(depth, start);
             depth++;
             if (move != 0) {
@@ -165,6 +202,7 @@ public class Engine {
             }
         } while (System.nanoTime() - start < moveTime);
 
+        System.out.println(depth - 1);
         return bestMove;
     }
 }
